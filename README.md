@@ -1,5 +1,5 @@
 # Ex.04 Design a Website for Server Side Processing
-## Date:
+## Date:29-05-2026
 
 ## AIM:
 To create a web page to calculate total bill amount with GST from price and GST percentage using server-side scripts.
@@ -43,12 +43,131 @@ Render the result to the HTML template.
 Publish the website in Localhost.
 
 ## PROGRAM:
+## math.html
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GST Bill Calculator</title>
+
+    <style>
+
+        body{
+            background-color: honeydew;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .container{
+            width: 400px;
+            margin: auto;
+        }
+
+        h1{
+            margin-bottom: 30px;
+        }
+
+        input{
+            width: 120px;
+            height: 25px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        button{
+            padding: 6px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        h2{
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>GST Bill Calculator</h1>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <label>Enter Price:</label><br>
+
+            <input type="number" name="price" required><br>
+
+            <label>Enter GST %:</label><br>
+
+            <input type="number" name="gst" required><br>
+
+            <button type="submit">Calculate</button>
+
+        </form>
+
+        {% if total %}
+
+            <h2>Price : {{ price }}</h2>
+
+            <h2>GST : {{ gst }}%</h2>
+
+            <h2>Total Bill Amount : {{ total }}</h2>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
+```
+## views.py
+```
+from django.shortcuts import render
+
+def home(request):
+
+    total = None
+    price = None
+    gst = None
+
+    if request.method == 'POST':
+
+        price = float(request.POST['price'])
+        gst = float(request.POST['gst'])
+
+        total = price + (price * gst / 100)
+
+    return render(request, 'math.html',
+                  {'total': total,
+                   'price': price,
+                   'gst': gst})
+```
+## urls.py
+```
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('gstapp.urls')),
+]
+
+```
+
 
 
 ## OUTPUT - SERVER SIDE:
 
+<img width="1855" height="350" alt="image" src="https://github.com/user-attachments/assets/cc7091d8-ea26-45a0-a6c7-a4aab6e4ae79" />
 
 ## OUTPUT - WEBPAGE:
+
+<img width="920" height="411" alt="image" src="https://github.com/user-attachments/assets/e5ecf169-a1cf-4ca7-8b9e-b55f19b6b47e" />
 
 
 ## RESULT:
