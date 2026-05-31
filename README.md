@@ -48,80 +48,31 @@ Publish the website in Localhost.
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GST Bill Calculator</title>
-
-    <style>
-
-        body{
-            background-color: honeydew;
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        .container{
-            width: 400px;
-            margin: auto;
-        }
-
-        h1{
-            margin-bottom: 30px;
-        }
-
-        input{
-            width: 120px;
-            height: 25px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        button{
-            padding: 6px 15px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        h2{
-            margin-top: 20px;
-        }
-
-    </style>
+    <title>GST Calculator</title>
 </head>
-
 <body>
 
-    <div class="container">
+    <form method="post">
+    <h2>GST Calculator</h2>
 
-        <h1>GST Bill Calculator</h1>
+        {% csrf_token %}
+        <label for="price">Price :</label>
+        <input type="text" name="price" required><br><br>
 
-        <form method="POST">
+        <label for="gst">GST (%):</label>
+        <input type="text" name="gst" required><br><br>
 
-            {% csrf_token %}
+        <button type="submit">Calculate</button>
+    </form>
 
-            <label>Enter Price:</label><br>
-
-            <input type="number" name="price" required><br>
-
-            <label>Enter GST %:</label><br>
-
-            <input type="number" name="gst" required><br>
-
-            <button type="submit">Calculate</button>
-
-        </form>
-
-        {% if total %}
-
-            <h2>Price : {{ price }}</h2>
-
-            <h2>GST : {{ gst }}%</h2>
-
-            <h2>Total Bill Amount : {{ total }}</h2>
-
+    {% if gst_amt is not None %}
+        <h2>Result:</h2>
+        {% if "Error" in gst_amt|stringformat:"s" %}
+            <p style="color: red;">{{ gst_amt }}</p>
+        {% else %}
+            <p>GST: {{ gst_amt|stringformat:".2f" }}</p>
         {% endif %}
-
-    </div>
-
+    {% endif %}
 </body>
 </html>
 ```
